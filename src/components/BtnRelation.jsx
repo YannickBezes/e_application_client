@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import cookie from "react-cookies";
 
-export default class Relation extends Component {
+export default class BtnRelation extends Component {
   constructor(props) {
     super(props);
 

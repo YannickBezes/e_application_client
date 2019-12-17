@@ -1,105 +1,105 @@
-import React, { Component } from "react";
-import API from "../API";
+import React, { Component } from 'react'
+import API from '../API'
 
 export default class Navigation extends Component {
-  lastCall;
-  lastCallTimer;
+  lastCall
+  lastCallTimer
   constructor(props) {
-    super(props);
+    super(props)
     let {
       params: { word }
-    } = this.props;
+    } = this.props
 
     this.state = {
-      word: word ? word : "",
+      word: word ? word : '',
       handler: props.handler,
       suggestions: [],
       clear: props.clear,
       controller: null,
       requests: []
-    };
+    }
     // Bind
-    this.updateInputValue = this.updateInputValue.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.debounce = this.debounce.bind(this);
+    this.updateInputValue = this.updateInputValue.bind(this)
+    this.onClick = this.onClick.bind(this)
+    this.debounce = this.debounce.bind(this)
 
     // References
-    this.input = React.createRef();
+    this.input = React.createRef()
   }
 
   componentDidMount() {
     let { word } = this.state
-    if (word) this.onClick();
+    if (word) this.onClick()
 
-    this.input.current.addEventListener("keyup", event => {
-      if (this.state.word !== "" && event.key === "Enter") this.onClick();
-    });
+    this.input.current.addEventListener('keyup', event => {
+      if (this.state.word !== '' && event.key === 'Enter') this.onClick()
+    })
   }
 
   componentWillUnmount() {
-    this.input.current.removeEventListener("keyup");
+    this.input.current.removeEventListener('keyup')
   }
 
   async onClick() {
-    let { requests, controller } = this.state;
+    let { requests, controller } = this.state
 
     // Check if all precedent requests are finished
     if (controller) {
-      let all_request_ended = true;
+      let all_request_ended = true
       requests.forEach(req => {
-        if (!req) all_request_ended = false;
-      });
+        if (!req) all_request_ended = false
+      })
       if (!all_request_ended) controller.abort()
     }
-    
+
     // Set a new controller
-    controller = new AbortController();
+    controller = new AbortController()
     this.setState({ controller })
     let signal = controller.signal
 
     // Clear suggestions
-    this.setState({ suggestions: [] });
-    
-    this.state.clear();
+    this.setState({ suggestions: [] })
+
+    this.state.clear()
     // Get definitions
-    this.state.handler(await API.getDefinitions(this.state.word, signal));
+    this.state.handler(await API.getDefinitions(this.state.word, signal))
 
     // Get relations
     for (let i = 0; i < this.props.relations.length; i++) {
-      const rel = this.props.relations[i];
+      const rel = this.props.relations[i]
       // if (rel.checked) {
-      requests.push(false);
+      requests.push(false)
       let data = await API.getRelations(
         this.state.word,
         rel.id,
         signal,
         this.props.limits
-      );
+      )
 
-      requests[i] = true;
-      this.state.handler(data);
+      requests[i] = true
+      this.state.handler(data)
       // }
     }
   }
 
   async updateInputValue(event) {
-    let { value } = event.target;
+    let { value } = event.target
 
     if (value === 0) {
       this.setState({ word: event.target.innerText }, () => {
-        this.onClick();
-      });
+        this.onClick()
+      })
     } else {
-      this.setState({ word: value });
+      this.setState({ word: value })
       if (value.length >= 3) {
         // Debounce function (wait 200ms between calls)
         this.debounce(async () => {
-          let data = await API.getAutocomplete(value);
-          this.setState({ suggestions: data });
-        }, 200)();
-        this.setState({ last_update: Date.now() });
+          let data = await API.getAutocomplete(value)
+          this.setState({ suggestions: data })
+        }, 200)()
+        this.setState({ last_update: Date.now() })
       } else {
-        this.setState({ suggestions: [] });
+        this.setState({ suggestions: [] })
       }
     }
   }
@@ -142,18 +142,18 @@ export default class Navigation extends Component {
           </div>
         </div>
       </nav>
-    );
+    )
   }
 
   debounce(f, t) {
-    let self = this;
+    let self = this
     return function(args) {
-      let previousCall = self.lastCall;
-      self.lastCall = Date.now();
+      let previousCall = self.lastCall
+      self.lastCall = Date.now()
       if (previousCall && self.lastCall - previousCall <= t) {
-        clearTimeout(self.lastCallTimer);
+        clearTimeout(self.lastCallTimer)
       }
-      self.lastCallTimer = setTimeout(() => f(args), t);
-    };
+      self.lastCallTimer = setTimeout(() => f(args), t)
+    }
   }
 }
