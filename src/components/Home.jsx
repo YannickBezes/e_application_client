@@ -1000,21 +1000,7 @@ export default class Home extends Component {
     } = this.state;
     if (incoming_relations.length > 0 && outcoming_relations.length > 0) {
       incoming_relations = this.copy(incoming_relations_save, value); // Reset
-      // incoming_relations_save.forEach((el, i) => {
-      //   if (this.state.relations[i].checked) {
-      //     if (value < el.length) incoming_relations.push(el.slice(0, value));
-      //     else incoming_relations.push(el);
-      //   } else incoming_relations.push([]);
-      // });
-
       outcoming_relations = this.copy(outcoming_relations_save, value);
-      // outcoming_relations = []; // Reset
-      // outcoming_relations_save.forEach((el, i) => {
-      //   if (this.state.relations[i].checked) {
-      //     if (value < el.length) outcoming_relations.push(el.slice(0, value));
-      //     else outcoming_relations.push(el);
-      //   } else outcoming_relations.push([]);
-      // });
 
       this.setState({
         incoming_relations,
@@ -1100,16 +1086,11 @@ export default class Home extends Component {
       incoming_relations_save.push(res.incoming_relations);
 
       // Sort
-      outcoming_relations_save = this.sort(
-        outcoming_relations_save,
-        sort_weight
-      );
+      outcoming_relations_save = this.sort(outcoming_relations_save, sort_weight);
       incoming_relations_save = this.sort(incoming_relations_save, sort_weight);
+
       // Copy
-      outcoming_relations = this.copy(
-        outcoming_relations_save,
-        parseInt(limits)
-      );
+      outcoming_relations = this.copy(outcoming_relations_save, parseInt(limits));
       incoming_relations = this.copy(incoming_relations_save, parseInt(limits));
 
       this.setState({
