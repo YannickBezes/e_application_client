@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Navigation from './Navigation'
 import Sidebar from './Sidebar'
+import Relations from './Relations'
 
 export default class Home extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ export default class Home extends Component {
     this.handle_limit = this.handle_limit.bind(this)
     this.handle_sort = this.handle_sort.bind(this)
     this.clear_search = this.clear_search.bind(this)
+    this.gotToTop = this.gotToTop.bind(this)
 
     // State
     this.state = {
@@ -958,6 +960,26 @@ export default class Home extends Component {
         }
       ]
     }
+
+    // References
+    this.btn_to_top = React.createRef()
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', () => {
+      if(window.pageYOffset > 300)
+        this.btn_to_top.current.classList.add("show")
+      else
+        this.btn_to_top.current.classList.remove("show")
+    })
+  }
+
+  gotToTop() {
+    window.scrollTo({
+      top: 100,
+      left: 0,
+      behavior: 'smooth'
+    })
   }
 
   handle_updateRelation(index, bool) {
@@ -1111,20 +1133,26 @@ export default class Home extends Component {
 
   render_relations(rel, index_relation) {
     let { relations } = this.state
-    return relations[index_relation].checked && rel.length > 0 ? (
-      <li className="relation-content" key={index_relation}>
-        <h4>Relation: {relations[index_relation].name.slice(2)}</h4>
-        <ul className="relation-ul">
-          {rel.map((el, i) => (
-            <li key={i}>
-              <a href={`/search/${el.split(';')[1]}`}>{el}</a>
-            </li>
-          ))}
-        </ul>
-      </li>
-    ) : (
-      false
-    )
+
+    return relations[index_relation].checked && rel.length > 0 ?
+      <Relations relation={rel} index_relation={index_relation} name={relations[index_relation].name.slice(2)} key={index_relation}/>
+      : (
+        false
+      )
+    // return relations[index_relation].checked && rel.length > 0 ? (
+    //   <li className="relation-content" key={index_relation}>
+    //     <h4>Relation: {relations[index_relation].name.slice(2)}</h4>
+    //     <ul className="relation-ul">
+    //       {rel.map((el, i) => (
+    //         <li key={i}>
+    //           <a href={`/search/${el.split(';')[1]}`}>{el}</a>
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   </li>
+    // ) : (
+    //   false
+    // )
   }
 
   render() {
@@ -1144,6 +1172,7 @@ export default class Home extends Component {
           params={this.props.match.params}
         />
         <div className="main">
+            <button id="button" onClick={this.gotToTop} ref={this.btn_to_top}></button>
           <Sidebar
             relations={this.state.relations}
             handle_limit={this.handle_limit}
@@ -1164,7 +1193,7 @@ export default class Home extends Component {
                   </ul>
                 </div>
                 <div>
-                  <div className="card">
+                  <div className="card outcomming-relations">
                     <h3>Relations sortantes</h3>
                     <ul>
                       {outcoming_relations.map((rel, i) => {
@@ -1172,19 +1201,12 @@ export default class Home extends Component {
                       })}
                     </ul>
                   </div>
-                  <div className="card">
+                  <div className="card incomming-relations">
                     <h3>Relations entrantes</h3>
-                    <ul>
+                    <ul >
                       {incoming_relations.map((rel, i) => {
                         return this.render_relations(rel, i)
                       })}
-                      {/* {incoming_relations.map(rel =>
-                        rel.map((el, i) => (
-                          <li key={i}>
-                            <a href={`/search/${el.split(";")[1]}`}>{el}</a>
-                          </li>
-                        ))
-                      )} */}
                     </ul>
                   </div>
                 </div>

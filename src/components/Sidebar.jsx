@@ -65,11 +65,11 @@ export default class Sidebar extends Component {
 
   checkCollapse() {
     let { collapse } = this.state
-    if (window.innerWidth <= 1024) {
+    if (window.innerWidth <= 1024 && !collapse) {
       collapse = true
       this.btnOption.current.classList.remove('hidden')
       this.sidebar.current.classList.remove('show')
-    } else {
+    } else if(window.innerWidth > 1024) {
       collapse = false
       this.btnOption.current.classList.add('hidden')
       this.sidebar.current.classList.add('show')
