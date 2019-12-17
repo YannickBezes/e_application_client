@@ -94,6 +94,15 @@ body {
 }
 
 /* ------------ MAIN ------------ */
+.hide {
+  display: none!important;
+}
+
+.card h4,
+.card h3 {
+  cursor: pointer;
+}
+
 #button {
   display: inline-block;
   border: none;

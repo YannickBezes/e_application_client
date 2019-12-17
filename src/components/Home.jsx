@@ -14,6 +14,7 @@ export default class Home extends Component {
     this.handle_sort = this.handle_sort.bind(this)
     this.clear_search = this.clear_search.bind(this)
     this.gotToTop = this.gotToTop.bind(this)
+    this.click_section = this.click_section.bind(this)
 
     // State
     this.state = {
@@ -1131,28 +1132,25 @@ export default class Home extends Component {
     }
   }
 
+  click_section(e) {
+    let el = e.target.nextSibling
+    el.classList.toggle('hide')
+  }
+
   render_relations(rel, index_relation) {
     let { relations } = this.state
 
     return relations[index_relation].checked && rel.length > 0 ?
-      <Relations relation={rel} index_relation={index_relation} name={relations[index_relation].name.slice(2)} key={index_relation}/>
+      <Relations 
+        relation={rel} 
+        index_relation={index_relation} 
+        name={relations[index_relation].name.slice(2)} 
+        key={index_relation}
+        click={this.click_section}
+      />
       : (
         false
       )
-    // return relations[index_relation].checked && rel.length > 0 ? (
-    //   <li className="relation-content" key={index_relation}>
-    //     <h4>Relation: {relations[index_relation].name.slice(2)}</h4>
-    //     <ul className="relation-ul">
-    //       {rel.map((el, i) => (
-    //         <li key={i}>
-    //           <a href={`/search/${el.split(';')[1]}`}>{el}</a>
-    //         </li>
-    //       ))}
-    //     </ul>
-    //   </li>
-    // ) : (
-    //   false
-    // )
   }
 
   render() {
@@ -1183,7 +1181,7 @@ export default class Home extends Component {
             {search ? (
               <div>
                 <div className="card">
-                  <h3>Définitions : </h3>
+                  <h3 onClick={this.click_section}>Définitions : </h3>
                   <ul className="definitions">
                     {definitions.length > 0 ? (
                       definitions.map((def, i) => <li key={i}>{def}</li>)
@@ -1194,7 +1192,7 @@ export default class Home extends Component {
                 </div>
                 <div>
                   <div className="card outcomming-relations">
-                    <h3>Relations sortantes</h3>
+                    <h3 onClick={this.click_section}>Relations sortantes</h3>
                     <ul>
                       {outcoming_relations.map((rel, i) => {
                         return this.render_relations(rel, i)
@@ -1202,8 +1200,8 @@ export default class Home extends Component {
                     </ul>
                   </div>
                   <div className="card incomming-relations">
-                    <h3>Relations entrantes</h3>
-                    <ul >
+                    <h3 onClick={this.click_section}>Relations entrantes</h3>
+                    <ul>
                       {incoming_relations.map((rel, i) => {
                         return this.render_relations(rel, i)
                       })}

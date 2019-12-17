@@ -7,11 +7,13 @@ export default class Relations extends Component {
     this.state = {
       relations: props.relation,
       index_relation: props.index_relation,
-      name: props.name
+      name: props.name,
+      click: props.click
     }
 
     // Bindings
     this.parse_rel = this.parse_rel.bind(this)
+    this.handle_click = this.handle_click.bind(this)
   }
 
   render_relation(rel) {
@@ -32,12 +34,16 @@ export default class Relations extends Component {
     }
   }
 
+  handle_click(e) {
+    this.state.click(e)
+  }
+
 
   render() {
-    let { relations, index_relation, name } = this.state
+    let { relations, index_relation, name, click } = this.state
     return (
       <li className="relation-content" key={index_relation}>
-        <h4>Relation: {name}</h4>
+        <h4 onClick={this.handle_click}>Relation: {name}</h4>
         <ul className="relation-ul">
           {relations.map((el, i) => (
             <li key={i}>
