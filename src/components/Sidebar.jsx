@@ -14,7 +14,7 @@ export default class Sidebar extends Component {
       handle_limit: props.handle_limit,
       handle_sort: props.handle_sort,
       handle_updateRelation: props.handle_updateRelation,
-      handle_display: props.handle_display,
+      handle_display: props.handle_display_list,
       collapse: false,
       display_list: true
     }
@@ -113,7 +113,7 @@ export default class Sidebar extends Component {
 
     cookie.save('display_list', display_list, { path: '/' })
     this.setState({ display_list })
-    // this.state.handle_display(display_list)
+    this.state.handle_display(display_list)
   }
 
   onChangeLimit(event) {

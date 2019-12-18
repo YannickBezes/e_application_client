@@ -203,6 +203,15 @@ body {
   color: #ffc107;
 }
 
+.display-blocs-relation li {
+  list-style: none;
+  display: inline-block;
+}
+
+.display-blocs-relation li:not(:first-child)::before {
+  content: ", ";
+}
+
 /* ------------ SIDEBAR ------------ */
 .sidebar-container {
   display: flex;

@@ -15,12 +15,14 @@ export default class Home extends Component {
     this.clear_search = this.clear_search.bind(this)
     this.gotToTop = this.gotToTop.bind(this)
     this.click_section = this.click_section.bind(this)
+    this.handle_display_list = this.handle_display_list.bind(this)
 
     // State
     this.state = {
       search: false,
       limits: '',
       sort_weight: false,
+      display_list: true,
       outcoming_relations_save: [],
       incoming_relations_save: [],
       outcoming_relations: [],
@@ -983,6 +985,10 @@ export default class Home extends Component {
     })
   }
 
+  handle_display_list(display_list) {
+    this.setState({display_list})
+  }
+
   handle_updateRelation(index, bool) {
     let {
       relations,
@@ -1138,7 +1144,7 @@ export default class Home extends Component {
   }
 
   render_relations(rel, index_relation) {
-    let { relations } = this.state
+    let { relations, display_list } = this.state
 
     return relations[index_relation].checked && rel.length > 0 ?
       <Relations 
@@ -1147,6 +1153,7 @@ export default class Home extends Component {
         name={relations[index_relation].name.slice(2)} 
         key={index_relation}
         click={this.click_section}
+        display_list={display_list}
       />
       : (
         false
@@ -1176,6 +1183,7 @@ export default class Home extends Component {
             handle_limit={this.handle_limit}
             handle_sort={this.handle_sort}
             handle_updateRelation={this.handle_updateRelation}
+            handle_display_list={this.handle_display_list}
           />
           <div className="main-container">
             {search ? (

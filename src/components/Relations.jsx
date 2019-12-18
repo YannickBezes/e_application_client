@@ -8,12 +8,17 @@ export default class Relations extends Component {
       relations: props.relation,
       index_relation: props.index_relation,
       name: props.name,
-      click: props.click
+      click: props.click,
+      display_list: props.display_list
     }
 
     // Bindings
     this.parse_rel = this.parse_rel.bind(this)
     this.handle_click = this.handle_click.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({display_list: nextProps.display_list})
   }
 
   render_relation(rel) {
@@ -38,13 +43,12 @@ export default class Relations extends Component {
     this.state.click(e)
   }
 
-
   render() {
-    let { relations, index_relation, name, click } = this.state
+    let { relations, index_relation, name, display_list } = this.state
     return (
       <li className="relation-content" key={index_relation}>
         <h4 onClick={this.handle_click}>Relation: {name}</h4>
-        <ul className="relation-ul">
+        <ul className={`relation-ul ${!display_list ? 'display-blocs-relation': ''}`}>
           {relations.map((el, i) => (
             <li key={i}>
               {this.render_relation(el)}
