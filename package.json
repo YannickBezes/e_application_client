@@ -2,6 +2,7 @@
   "name": "e_application_client",
   "version": "0.0.0",
   "private": true,
+  "homepage": "https://jeuxdemots.bsy.ovh",
   "dependencies": {
     "react": "16.9.0",
     "react-cookies": "^0.1.1",
