@@ -19,6 +19,7 @@ export default class Relations extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({display_list: nextProps.display_list})
+    this.setState({relations: nextProps.relation})
   }
 
   render_relation(rel) {
